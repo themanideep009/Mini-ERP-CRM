@@ -1,0 +1,78 @@
+========================================================================
+MINI ERP + CRM OPERATIONS PORTAL - DEVELOPMENT PROGRESS LOG
+========================================================================
+
+STEP 1: INITIAL DIRECTORY AND LOG SETUP
+------------------------------------------------------------------------
+- Created workspace folders: backend, frontend, postman.
+- Created info.txt to log steps and changes.
+- Initialized monorepo task tracking in task.md.
+
+STEP 2: DATABASE AND BACKEND DEFINITION
+------------------------------------------------------------------------
+- Initialized backend package.json with ES Modules configuration.
+- Set up Prisma configuration with PostgreSQL connection.
+- Created schema.prisma defining core models: User, Customer, Product, StockMovement, SalesChallan, ChallanItem.
+- Created seed.js script to pre-populate database with role accounts (Admin, Sales, Warehouse, Accounts), customers, products, stock entries, and sample challans.
+- Configured backend .env and .env.example templates.
+
+STEP 3: BACKEND CONTROLLERS, SERVICES & ROUTING IMPLEMENTATION
+------------------------------------------------------------------------
+- Created database client in config/db.js.
+- Developed centralized success and error response utility in utils/responses.js.
+- Created Zod validation schemas for registration/login (auth.js), CRM customers (customer.js), product/stock inputs (product.js), and sales challans (challan.js).
+- Coded authentication service (authService.js), customer CRM service (customerService.js), inventory product service (productService.js), and transaction-controlled challan service (challanService.js).
+- Built Express routing files, wiring paths to controller actions: authRoutes.js, customerRoutes.js, productRoutes.js, challanRoutes.js, stockMovementRoutes.js, and dashboardRoutes.js.
+- Wired all controllers: authController.js, customerController.js, productController.js, challanController.js, dashboardController.js.
+- Configured Express app.js with Helmet security, CORS rules, JSON formatting, routing, and centralized error handler middleware.
+- Built server.js starting script with graceful shutdown connection handlers.
+
+STEP 4: DATABASE CONNECTION AND RUNTIME INSTRUCTIONS
+------------------------------------------------------------------------
+- Database and backend source configurations are 100% written.
+- Attempted to run the PostgreSQL service using Docker Compose. The command failed because Docker Desktop/Daemon is not running on this machine.
+- Note: Pushing schema and seeding data requires a running PostgreSQL database. 
+- Actions: Ready to proceed with frontend pages and UI setup.
+
+CURRENT STATUS:
+- Directory structure: Initialized.
+- Database Schema: Defined (Prisma).
+- Seed Script: Ready.
+- Backend: Complete (All modules, controllers, and services built).
+- Database Engine: Connection pending (Awaiting Docker service or local PostgreSQL).
+- Frontend: Package.json initialized.
+
+========================================================================
+DETAILS OF CHANGES MADE
+========================================================================
+1. [NEW] Created c:\FundsRoom\info.txt (Updated)
+2. [NEW] Created c:\FundsRoom\backend\package.json
+3. [NEW] Created c:\FundsRoom\backend\prisma\schema.prisma
+4. [NEW] Created c:\FundsRoom\backend\prisma\seed.js
+5. [NEW] Created c:\FundsRoom\backend\.env
+6. [NEW] Created c:\FundsRoom\backend\.env.example
+7. [NEW] Created c:\FundsRoom\backend\src\config\db.js
+8. [NEW] Created c:\FundsRoom\backend\src\utils\responses.js
+9. [NEW] Created c:\FundsRoom\backend\src\validators\auth.js
+10. [NEW] Created c:\FundsRoom\backend\src\validators\customer.js
+11. [NEW] Created c:\FundsRoom\backend\src\validators\product.js
+12. [NEW] Created c:\FundsRoom\backend\src\validators\challan.js
+13. [NEW] Created c:\FundsRoom\backend\src\middleware\auth.js
+14. [NEW] Created c:\FundsRoom\backend\src\middleware\errorHandler.js
+15. [NEW] Created c:\FundsRoom\backend\src\services\authService.js
+16. [NEW] Created c:\FundsRoom\backend\src\services\customerService.js
+17. [NEW] Created c:\FundsRoom\backend\src\services\productService.js
+18. [NEW] Created c:\FundsRoom\backend\src\services\challanService.js
+19. [NEW] Created c:\FundsRoom\backend\src\controllers\authController.js
+20. [NEW] Created c:\FundsRoom\backend\src\controllers\customerController.js
+21. [NEW] Created c:\FundsRoom\backend\src\controllers\productController.js
+22. [NEW] Created c:\FundsRoom\backend\src\controllers\challanController.js
+23. [NEW] Created c:\FundsRoom\backend\src\controllers\dashboardController.js
+24. [NEW] Created c:\FundsRoom\backend\src\routes\authRoutes.js
+25. [NEW] Created c:\FundsRoom\backend\src\routes\customerRoutes.js
+26. [NEW] Created c:\FundsRoom\backend\src\routes\productRoutes.js
+27. [NEW] Created c:\FundsRoom\backend\src\routes\challanRoutes.js
+28. [NEW] Created c:\FundsRoom\backend\src\routes\stockMovementRoutes.js
+29. [NEW] Created c:\FundsRoom\backend\src\routes\dashboardRoutes.js
+30. [NEW] Created c:\FundsRoom\backend\src\app.js
+31. [NEW] Created c:\FundsRoom\backend\src\server.js

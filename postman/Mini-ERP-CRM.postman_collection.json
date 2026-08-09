@@ -1,0 +1,673 @@
+{
+  "info": {
+    "_postman_id": "mini-erp-crm-collection-v1",
+    "name": "Mini ERP + CRM Operations Portal",
+    "description": "Complete API collection for Mini ERP + CRM Portal. Run Login first to get the JWT token, which is auto-saved to the environment variable.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔒 Authentication",
+      "item": [
+        {
+          "name": "Login (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "    console.log('Token saved:', jsonData.data.token.substring(0, 20) + '...');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login with admin credentials. Token is auto-saved to collection variables."
+          }
+        },
+        {
+          "name": "Login (Sales)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sales@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login (Warehouse)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"warehouse@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Returns the currently logged-in user's profile from JWT token."
+          }
+        },
+        {
+          "name": "Register New User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Sales Person\",\n  \"email\": \"newsales@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"SALES\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register a new user. Role must be ADMIN | SALES | WAREHOUSE | ACCOUNTS"
+          }
+        },
+        {
+          "name": "Invalid Login (Test 401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"wrongpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Should return 401 INVALID_CREDENTIALS error."
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Customers (CRM)",
+      "item": [
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/customers?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "search", "value": "", "disabled": true },
+                { "key": "status", "value": "ACTIVE", "disabled": true },
+                { "key": "customerType", "value": "WHOLESALE", "disabled": true }
+              ]
+            },
+            "description": "List customers with optional search, status, customerType filters and pagination."
+          }
+        },
+        {
+          "name": "Get Customer by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/customers/REPLACE_WITH_CUSTOMER_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "REPLACE_WITH_CUSTOMER_ID"]
+            }
+          }
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Ravi Kumar\",\n  \"mobile\": \"9876543210\",\n  \"email\": \"ravi@example.com\",\n  \"businessName\": \"Kumar Traders\",\n  \"gstNumber\": \"07AAAAA1111A1Z1\",\n  \"customerType\": \"WHOLESALE\",\n  \"address\": \"123 Market Street, Delhi - 110001\",\n  \"status\": \"LEAD\",\n  \"followUpDate\": \"2026-09-15\",\n  \"notes\": \"Interested in bulk purchase of electronics\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            },
+            "description": "Create a new customer. GST format: 15-character Indian GST number."
+          }
+        },
+        {
+          "name": "Update Customer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Ravi Kumar Updated\",\n  \"mobile\": \"9876543210\",\n  \"email\": \"ravi.updated@example.com\",\n  \"businessName\": \"Kumar Traders & Co\",\n  \"gstNumber\": \"07AAAAA1111A1Z1\",\n  \"customerType\": \"WHOLESALE\",\n  \"address\": \"456 New Market, Delhi - 110002\",\n  \"status\": \"ACTIVE\",\n  \"followUpDate\": \"2026-09-30\",\n  \"notes\": \"Upgraded to active customer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers/REPLACE_WITH_CUSTOMER_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "REPLACE_WITH_CUSTOMER_ID"]
+            }
+          }
+        },
+        {
+          "name": "Delete Customer",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/customers/REPLACE_WITH_CUSTOMER_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "REPLACE_WITH_CUSTOMER_ID"]
+            },
+            "description": "Delete customer. Will fail with 400 if customer has associated challans."
+          }
+        },
+        {
+          "name": "Search Customers",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/customers?search=sharma&status=ACTIVE",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"],
+              "query": [
+                { "key": "search", "value": "sharma" },
+                { "key": "status", "value": "ACTIVE" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏷️ Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "search", "value": "", "disabled": true },
+                { "key": "category", "value": "Electronics", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/REPLACE_WITH_PRODUCT_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "REPLACE_WITH_PRODUCT_ID"]
+            }
+          }
+        },
+        {
+          "name": "Get Product Stock Movements",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/REPLACE_WITH_PRODUCT_ID/stock-movements",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "REPLACE_WITH_PRODUCT_ID", "stock-movements"]
+            },
+            "description": "Get all stock IN/OUT movement history for a specific product."
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productName\": \"4K HDMI Cable 2m\",\n  \"sku\": \"PROD-HDMI-010\",\n  \"category\": \"Accessories\",\n  \"unitPrice\": 450.00,\n  \"currentStock\": 200,\n  \"minimumStock\": 30,\n  \"warehouseLocation\": \"Shelf D-4\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Create new product. If currentStock > 0, an initial IN stock movement is recorded."
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productName\": \"4K HDMI Cable 2m - Premium\",\n  \"sku\": \"PROD-HDMI-010\",\n  \"category\": \"Accessories\",\n  \"unitPrice\": 550.00,\n  \"currentStock\": 200,\n  \"minimumStock\": 40,\n  \"warehouseLocation\": \"Shelf D-5\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/REPLACE_WITH_PRODUCT_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "REPLACE_WITH_PRODUCT_ID"]
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/REPLACE_WITH_PRODUCT_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "REPLACE_WITH_PRODUCT_ID"]
+            },
+            "description": "Delete product. Will fail if product is referenced in any challan items."
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏭 Stock Movements",
+      "item": [
+        {
+          "name": "Stock IN - Add to Warehouse",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"REPLACE_WITH_PRODUCT_ID\",\n  \"quantityChanged\": 50,\n  \"movementType\": \"IN\",\n  \"reason\": \"New stock received from supplier - Purchase Order #PO-2026-001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stock-movements",
+              "host": ["{{baseUrl}}"],
+              "path": ["stock-movements"]
+            },
+            "description": "Record stock IN movement. Increases product currentStock."
+          }
+        },
+        {
+          "name": "Stock OUT - Remove from Warehouse",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"REPLACE_WITH_PRODUCT_ID\",\n  \"quantityChanged\": 10,\n  \"movementType\": \"OUT\",\n  \"reason\": \"Items damaged during warehouse inspection - write-off\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stock-movements",
+              "host": ["{{baseUrl}}"],
+              "path": ["stock-movements"]
+            },
+            "description": "Record stock OUT movement. Fails with 400 INSUFFICIENT_STOCK if stock is insufficient."
+          }
+        },
+        {
+          "name": "Stock OUT - Insufficient Stock (Test Error)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"REPLACE_WITH_PRODUCT_ID\",\n  \"quantityChanged\": 99999,\n  \"movementType\": \"OUT\",\n  \"reason\": \"Test insufficient stock scenario\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stock-movements",
+              "host": ["{{baseUrl}}"],
+              "path": ["stock-movements"]
+            },
+            "description": "Should return 400 INSUFFICIENT_STOCK error when requesting more than available."
+          }
+        }
+      ]
+    },
+    {
+      "name": "📜 Sales Challans",
+      "item": [
+        {
+          "name": "Get All Challans",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/challans?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "status", "value": "DRAFT", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Challan by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/challans/REPLACE_WITH_CHALLAN_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans", "REPLACE_WITH_CHALLAN_ID"]
+            }
+          }
+        },
+        {
+          "name": "Create Draft Challan",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"REPLACE_WITH_CUSTOMER_ID\",\n  \"items\": [\n    {\n      \"productId\": \"REPLACE_WITH_PRODUCT_ID_1\",\n      \"quantity\": 5\n    },\n    {\n      \"productId\": \"REPLACE_WITH_PRODUCT_ID_2\",\n      \"quantity\": 10\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/challans",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans"]
+            },
+            "description": "Creates a DRAFT challan. NO stock is deducted at this stage. Challan number is auto-generated (CH-2026-0001)."
+          }
+        },
+        {
+          "name": "Update Draft Challan",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"REPLACE_WITH_CUSTOMER_ID\",\n  \"items\": [\n    {\n      \"productId\": \"REPLACE_WITH_PRODUCT_ID_1\",\n      \"quantity\": 8\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/challans/REPLACE_WITH_CHALLAN_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans", "REPLACE_WITH_CHALLAN_ID"]
+            },
+            "description": "Update a DRAFT challan. Only DRAFT challans can be updated."
+          }
+        },
+        {
+          "name": "Confirm Challan (Deducts Stock!)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/challans/REPLACE_WITH_CHALLAN_ID/confirm",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans", "REPLACE_WITH_CHALLAN_ID", "confirm"]
+            },
+            "description": "CRITICAL: Confirms a DRAFT challan. Checks stock for ALL items. If any item is out of stock, ENTIRE confirmation is rejected. If all OK, stock is deducted and OUT movements recorded. Uses database transaction."
+          }
+        },
+        {
+          "name": "Cancel Challan (Restores Stock)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/challans/REPLACE_WITH_CHALLAN_ID/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans", "REPLACE_WITH_CHALLAN_ID", "cancel"]
+            },
+            "description": "Cancel a CONFIRMED challan. Stock is restored for all items. IN stock movements are recorded. Only CONFIRMED challans can be cancelled."
+          }
+        },
+        {
+          "name": "Confirm Challan - Insufficient Stock Test",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/challans/REPLACE_WITH_CHALLAN_ID_WITH_HIGH_QTY/confirm",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans", "REPLACE_WITH_CHALLAN_ID_WITH_HIGH_QTY", "confirm"]
+            },
+            "description": "Create a challan with quantity higher than available stock, then try to confirm it. Should return 400 INSUFFICIENT_STOCK error."
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard"]
+            },
+            "description": "Returns: summary KPIs, low stock products, customer distribution, recent challans, recent stock movements, sales trend, top products."
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛡️ Security Tests",
+      "item": [
+        {
+          "name": "Access Protected Route Without Token (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            },
+            "description": "Should return 401 UNAUTHORIZED when no token is provided."
+          }
+        },
+        {
+          "name": "Access Admin Route as Warehouse (403)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// First login as warehouse user",
+                  "// Note: You need to manually set the warehouse token here"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer REPLACE_WITH_WAREHOUSE_TOKEN" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Test Customer\",\n  \"mobile\": \"9999999999\",\n  \"email\": \"test@test.com\",\n  \"businessName\": \"Test Business\",\n  \"gstNumber\": \"07AAAAA1111A1Z1\",\n  \"customerType\": \"RETAIL\",\n  \"address\": \"Test Address 123\",\n  \"status\": \"LEAD\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            },
+            "description": "Warehouse role should NOT be able to create customers. Should return 403 FORBIDDEN."
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/health",
+              "raw": "http://localhost:5000/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["health"]
+            },
+            "description": "Health check endpoint. Returns 200 OK if server is running."
+          }
+        }
+      ]
+    }
+  ]
+}
