@@ -32,7 +32,7 @@ We recommend **Neon.tech** (free managed serverless PostgreSQL) or **Render Post
 1. Go to [Neon.tech](https://neon.tech) and sign up for a free account.
 2. Click **Create Project** -> Name it `fundsroom-db`.
 3. Copy the **Pooled Connection String**. It will look like:
-   `postgresql://alex:password123@ep-cool-cloud-123456.us-east-2.aws.neon.tech/neondb?sslmode=require`
+   `postgresql://neondb_owner:npg_bZ4etD1GfyAE@ep-bitter-block-axuz82eb-pooler.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require`
 
 ---
 
