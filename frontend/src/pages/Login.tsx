@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.js';
 import api from '../services/api.js';
@@ -7,10 +7,10 @@ type Mode = 'login' | 'register';
 type Role = 'ADMIN' | 'SALES' | 'WAREHOUSE' | 'ACCOUNTS';
 
 const DEMO_ACCOUNTS = [
-  { role: 'ADMIN' as Role,     email: 'admin@example.com',     name: 'System Admin',        color: '#6366f1' },
-  { role: 'SALES' as Role,     email: 'sales@example.com',     name: 'Sales Executive',     color: '#06b6d4' },
-  { role: 'WAREHOUSE' as Role, email: 'warehouse@example.com', name: 'Warehouse Ops',       color: '#10b981' },
-  { role: 'ACCOUNTS' as Role,  email: 'accounts@example.com',  name: 'Accounts Officer',    color: '#f59e0b' },
+  { role: 'ADMIN' as Role,     email: 'admin@example.com',     name: 'System Admin',        color: '#818cf8' },
+  { role: 'SALES' as Role,     email: 'sales@example.com',     name: 'Sales Executive',     color: '#38bdf8' },
+  { role: 'WAREHOUSE' as Role, email: 'warehouse@example.com', name: 'Warehouse Ops',       color: '#34d399' },
+  { role: 'ACCOUNTS' as Role,  email: 'accounts@example.com',  name: 'Accounts Officer',    color: '#fbbf24' },
 ];
 
 const GOOGLE_PRESET_ACCOUNTS = [
@@ -26,6 +26,66 @@ const ROLE_OPTIONS: { value: Role; label: string; desc: string }[] = [
   { value: 'ACCOUNTS',  label: 'ACCOUNTS',  desc: 'Audits & Financials' },
   { value: 'ADMIN',     label: 'ADMIN',     desc: 'Full System Access' },
 ];
+
+const TYPEWRITER_PHRASES = [
+  "Streamlining B2B wholesale operations, inventory & CRM in one portal.",
+  "Atomic stock transactions with zero negative inventory guarantees.",
+  "Immutable price snapshots & automated sales challan dispatches.",
+  "Role-based authorization for Admin, Sales, Warehouse & Finance.",
+  "Real-time low stock warnings & automated warehouse bin indexing.",
+];
+
+// Typewriter Component
+const TypewriterText: React.FC = () => {
+  const [phraseIdx, setPhraseIdx] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentPhrase = TYPEWRITER_PHRASES[phraseIdx];
+    let timer: any;
+
+    if (!isDeleting && displayText.length < currentPhrase.length) {
+      // Typing next character
+      timer = setTimeout(() => {
+        setDisplayText(currentPhrase.substring(0, displayText.length + 1));
+      }, 45);
+    } else if (!isDeleting && displayText.length === currentPhrase.length) {
+      // Pause at full sentence before deleting
+      timer = setTimeout(() => {
+        setIsDeleting(true);
+      }, 2400);
+    } else if (isDeleting && displayText.length > 0) {
+      // Deleting character by character
+      timer = setTimeout(() => {
+        setDisplayText(currentPhrase.substring(0, displayText.length - 1));
+      }, 25);
+    } else if (isDeleting && displayText.length === 0) {
+      // Finished deleting, move to next phrase
+      setIsDeleting(false);
+      setPhraseIdx((prev) => (prev + 1) % TYPEWRITER_PHRASES.length);
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, phraseIdx]);
+
+  return (
+    <div style={{ minHeight: '4.5rem', display: 'flex', alignItems: 'center' }}>
+      <p style={{ fontSize: '1.15rem', color: '#94a3b8', lineHeight: 1.6, fontWeight: 400, margin: 0 }}>
+        {displayText}
+        <span style={{
+          display: 'inline-block',
+          width: '2px',
+          height: '1.2em',
+          backgroundColor: '#6366f1',
+          marginLeft: '4px',
+          verticalAlign: 'middle',
+          animation: 'blink 1s step-start infinite',
+        }} />
+      </p>
+    </div>
+  );
+};
 
 const Login: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -140,397 +200,423 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-page">
-      {/* Grid background */}
+    <div className="login-page-split">
+      {/* Background ambient lighting */}
       <div className="login-bg-grid" />
 
-      {/* Floating decorative blobs */}
-      <div style={{ position:'absolute', top:'10%', left:'5%', width:320, height:320,
-        background:'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)',
-        pointerEvents:'none', borderRadius:'50%', filter:'blur(40px)' }} />
-      <div style={{ position:'absolute', bottom:'15%', right:'8%', width:240, height:240,
-        background:'radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 70%)',
-        pointerEvents:'none', borderRadius:'50%', filter:'blur(40px)' }} />
-
-      <div className="login-card">
-        <div className="p-8">
-          {/* Logo & Brand */}
-          <div className="text-center mb-6">
-            {/* Stocks-style SVG Logo */}
-            <div style={{ margin: '0 auto 0.875rem', display: 'flex', justifyContent: 'center' }}>
-              <div style={{
-                width: 68, height: 68,
-                background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(6,182,212,0.1))',
-                border: '1px solid rgba(99,102,241,0.3)',
-                borderRadius: 18,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 0 30px rgba(99,102,241,0.25), inset 0 1px 0 rgba(255,255,255,0.08)'
-              }}>
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <line x1="0" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.06)" strokeWidth="1"/>
-                  <line x1="0" y1="20" x2="40" y2="20" stroke="rgba(255,255,255,0.06)" strokeWidth="1"/>
-                  <line x1="0" y1="10" x2="40" y2="10" stroke="rgba(255,255,255,0.06)" strokeWidth="1"/>
-
-                  <line x1="7" y1="26" x2="7" y2="32" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round"/>
-                  <rect x="4.5" y="22" width="5" height="4" rx="1" fill="#ef4444"/>
-                  <line x1="7" y1="18" x2="7" y2="22" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round"/>
-
-                  <line x1="16" y1="28" x2="16" y2="32" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
-                  <rect x="13.5" y="18" width="5" height="10" rx="1" fill="#10b981"/>
-                  <line x1="16" y1="13" x2="16" y2="18" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
-
-                  <line x1="25" y1="25" x2="25" y2="30" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
-                  <rect x="22.5" y="14" width="5" height="11" rx="1" fill="#10b981"/>
-                  <line x1="25" y1="10" x2="25" y2="14" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
-
-                  <line x1="34" y1="22" x2="34" y2="28" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round"/>
-                  <rect x="31.5" y="18" width="5" height="4" rx="1" fill="#ef4444"/>
-                  <line x1="34" y1="12" x2="34" y2="18" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round"/>
-
-                  <path d="M4 31 L14 24 L22 17 L32 10" stroke="url(#trendGrad)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                  <circle cx="4"  cy="31" r="2" fill="#6366f1"/>
-                  <circle cx="32" cy="10" r="2.5" fill="#06b6d4"/>
-
-                  <defs>
-                    <linearGradient id="trendGrad" x1="4" y1="31" x2="32" y2="10" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#6366f1"/>
-                      <stop offset="100%" stopColor="#06b6d4"/>
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
-            </div>
-            <h1 style={{ fontSize:'1.4rem', fontWeight:800, letterSpacing:'-0.03em', color:'var(--text-primary)', marginBottom:'0.2rem' }}>
-              Mini ERP + CRM
-            </h1>
-            <p style={{ fontSize:'0.8rem', color:'var(--text-muted)' }}>Wholesale Operations Portal</p>
-          </div>
-
-          {/* Tab Switcher */}
-          <div className="login-tabs mb-6">
-            <button
-              type="button"
-              className={`login-tab ${mode === 'login' ? 'active' : ''}`}
-              onClick={() => { setMode('login'); clearState(); }}
-            >
-              Sign In
-            </button>
-            <button
-              type="button"
-              className={`login-tab ${mode === 'register' ? 'active' : ''}`}
-              onClick={() => { setMode('register'); clearState(); }}
-            >
-              Create Account
-            </button>
-          </div>
-
-          {/* Error Alert */}
-          {error && (
-            <div className="error-alert mb-4" style={{ animation: 'slideUp 0.2s ease' }}>
-              <span>⚠️</span>
-              <span>{error}</span>
-            </div>
-          )}
-
-          {/* ─── SIGN IN FORM ─── */}
-          {mode === 'login' && (
-            <form onSubmit={handleLogin} className="space-y-4 animate-slideUp">
-              <div className="form-group">
-                <label className="form-label">Email Address</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={loginEmail}
-                  onChange={e => setLoginEmail(e.target.value)}
-                  placeholder="you@company.com"
-                  autoComplete="email"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Password</label>
-                <div className="relative">
-                  <input
-                    type={showLoginPass ? 'text' : 'password'}
-                    className="form-control"
-                    value={loginPassword}
-                    onChange={e => setLoginPassword(e.target.value)}
-                    placeholder="••••••••"
-                    autoComplete="current-password"
-                    required
-                    style={{ paddingRight:'2.75rem' }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowLoginPass(s => !s)}
-                    style={{ position:'absolute', right:'0.75rem', top:'50%', transform:'translateY(-50%)',
-                      background:'none', border:'none', cursor:'pointer', color:'var(--text-muted)', lineHeight:1, display:'flex', alignItems:'center' }}
-                    aria-label={showLoginPass ? 'Hide password' : 'Show password'}
-                  >
-                    {showLoginPass ? (
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                    ) : (
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary w-full"
-                style={{ padding:'0.75rem', fontSize:'0.9rem', marginTop:'0.25rem' }}
-                disabled={submitting}
-              >
-                {submitting ? (
-                  <><span className="spinner spinner-xs" style={{ borderTopColor:'white' }} /> Authenticating...</>
-                ) : (
-                  '→ Sign In to Portal'
-                )}
-              </button>
-
-              {/* OR Divider */}
-              <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', margin:'0.25rem 0' }}>
-                <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
-                <span style={{ fontSize:'0.72rem', color:'var(--text-muted)', fontWeight:500, letterSpacing:'0.05em' }}>OR</span>
-                <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
-              </div>
-
-              {/* Google Sign-In Button */}
-              <button
-                type="button"
-                onClick={() => setShowGoogleModal(true)}
-                disabled={googleLoading}
-                style={{
-                  width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:'0.65rem',
-                  padding:'0.7rem 1.25rem',
-                  background:'#ffffff',
-                  border:'1px solid #dadce0',
-                  borderRadius:6,
-                  cursor: googleLoading ? 'not-allowed' : 'pointer',
-                  fontFamily:'Google Sans, Roboto, Inter, sans-serif',
-                  fontSize:'0.875rem',
-                  fontWeight:500,
-                  color:'#3c4043',
-                  letterSpacing:'0.01em',
-                  transition:'all 0.2s ease',
-                  opacity: googleLoading ? 0.8 : 1,
-                  boxShadow:'0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08)',
-                }}
-                onMouseEnter={e => { if (!googleLoading) (e.currentTarget as HTMLButtonElement).style.boxShadow='0 2px 8px rgba(0,0,0,0.18)'; (e.currentTarget as HTMLButtonElement).style.background='#f8f9fa'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLButtonElement).style.background='#ffffff'; }}
-              >
-                {googleLoading ? (
-                  <>
-                    <svg width="18" height="18" viewBox="0 0 18 18" style={{ animation:'spin 0.8s linear infinite' }}>
-                      <circle cx="9" cy="9" r="7" fill="none" stroke="#4285F4" strokeWidth="2" strokeDasharray="22" strokeDashoffset="8" strokeLinecap="round"/>
-                    </svg>
-                    <span>Authenticating Google account...</span>
-                  </>
-                ) : (
-                  <>
-                    {/* Official Google G Logo */}
-                    <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
-                      <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
-                      <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/>
-                      <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
-                    </svg>
-                    <span>Sign in with Google</span>
-                  </>
-                )}
-              </button>
-            </form>
-          )}
-
-          {/* ─── REGISTER FORM ─── */}
-          {mode === 'register' && (
-            <form onSubmit={handleRegister} className="space-y-4 animate-slideUp">
-              <div className="form-group">
-                <label className="form-label">Full Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={regName}
-                  onChange={e => setRegName(e.target.value)}
-                  placeholder="Rahul Verma"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Email Address</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={regEmail}
-                  onChange={e => setRegEmail(e.target.value)}
-                  placeholder="rahul@company.com"
-                  autoComplete="email"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Password</label>
-                <div className="relative">
-                  <input
-                    type={showRegPass ? 'text' : 'password'}
-                    className="form-control"
-                    value={regPassword}
-                    onChange={e => setRegPassword(e.target.value)}
-                    placeholder="Minimum 6 characters"
-                    minLength={6}
-                    required
-                    style={{ paddingRight:'2.75rem' }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowRegPass(s => !s)}
-                    style={{ position:'absolute', right:'0.75rem', top:'50%', transform:'translateY(-50%)',
-                      background:'none', border:'none', cursor:'pointer', color:'var(--text-muted)', lineHeight:1, display:'flex', alignItems:'center' }}
-                    aria-label={showRegPass ? 'Hide password' : 'Show password'}
-                  >
-                    {showRegPass ? (
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                    ) : (
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Employee Role Persona</label>
-                <div className="grid grid-cols-2 gap-2" style={{ marginTop:'0.2rem' }}>
-                  {ROLE_OPTIONS.map(opt => (
-                    <button
-                      key={opt.value}
-                      type="button"
-                      onClick={() => setRegRole(opt.value)}
-                      style={{
-                        padding:'0.6rem 0.75rem',
-                        borderRadius:'var(--radius-md)',
-                        border: regRole === opt.value ? '1px solid var(--primary)' : '1px solid var(--border-base)',
-                        background: regRole === opt.value ? 'var(--primary-light)' : 'var(--bg-input)',
-                        cursor:'pointer',
-                        textAlign:'left',
-                        transition:'all 0.15s ease',
-                      }}
-                    >
-                      <div style={{ fontSize:'0.68rem', fontWeight:800, color: regRole === opt.value ? '#a5b4fc' : 'var(--text-muted)', textTransform:'uppercase', letterSpacing:'0.05em' }}>
-                        {opt.label}
-                      </div>
-                      <div style={{ fontSize:'0.65rem', color:'var(--text-muted)', marginTop:'1px' }}>{opt.desc}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary w-full"
-                style={{ padding:'0.75rem', fontSize:'0.9rem', marginTop:'0.25rem' }}
-                disabled={submitting}
-              >
-                {submitting ? (
-                  <><span className="spinner spinner-xs" style={{ borderTopColor:'white' }} /> Creating Account...</>
-                ) : (
-                  '✦ Create Account & Sign In'
-                )}
-              </button>
-
-              {/* OR Divider */}
-              <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', margin:'0.25rem 0' }}>
-                <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
-                <span style={{ fontSize:'0.72rem', color:'var(--text-muted)', fontWeight:500, letterSpacing:'0.05em' }}>OR</span>
-                <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
-              </div>
-
-              {/* Google Sign-In Button */}
-              <button
-                type="button"
-                onClick={() => setShowGoogleModal(true)}
-                disabled={googleLoading}
-                style={{
-                  width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:'0.65rem',
-                  padding:'0.7rem 1.25rem',
-                  background:'#ffffff',
-                  border:'1px solid #dadce0',
-                  borderRadius:6,
-                  cursor: googleLoading ? 'not-allowed' : 'pointer',
-                  fontFamily:'Google Sans, Roboto, Inter, sans-serif',
-                  fontSize:'0.875rem',
-                  fontWeight:500,
-                  color:'#3c4043',
-                  letterSpacing:'0.01em',
-                  transition:'all 0.2s ease',
-                  opacity: googleLoading ? 0.8 : 1,
-                  boxShadow:'0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08)',
-                }}
-                onMouseEnter={e => { if (!googleLoading) (e.currentTarget as HTMLButtonElement).style.boxShadow='0 2px 8px rgba(0,0,0,0.18)'; (e.currentTarget as HTMLButtonElement).style.background='#f8f9fa'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLButtonElement).style.background='#ffffff'; }}
-              >
-                {googleLoading ? (
-                  <>
-                    <svg width="18" height="18" viewBox="0 0 18 18" style={{ animation:'spin 0.8s linear infinite' }}>
-                      <circle cx="9" cy="9" r="7" fill="none" stroke="#4285F4" strokeWidth="2" strokeDasharray="22" strokeDashoffset="8" strokeLinecap="round"/>
-                    </svg>
-                    <span>Authenticating Google account...</span>
-                  </>
-                ) : (
-                  <>
-                    <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
-                      <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
-                      <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/>
-                      <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
-                    </svg>
-                    <span>Sign up with Google</span>
-                  </>
-                )}
-              </button>
-            </form>
-          )}
-
-          {/* Toast Notification */}
-          {toast && (
+      <div className="login-container-split">
+        {/* ── LEFT COLUMN: PROJECT SHOWCASE & TYPEWRITER ── */}
+        <div className="login-brand-side">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.75rem' }}>
             <div style={{
-              position:'fixed', bottom:'2rem', left:'50%', transform:'translateX(-50%)',
-              background:'#1e293b', border:'1px solid rgba(99,102,241,0.3)',
-              color:'#e2e8f0', padding:'0.75rem 1.25rem', borderRadius:10,
-              fontSize:'0.82rem', fontWeight:500, zIndex:999,
-              boxShadow:'0 8px 30px rgba(0,0,0,0.4)',
-              display:'flex', alignItems:'center', gap:'0.6rem',
-              maxWidth:380, textAlign:'center',
-              animation:'slideUp 0.25s ease',
+              width: 52, height: 52,
+              background: 'linear-gradient(135deg, rgba(79,70,229,0.25), rgba(14,165,233,0.15))',
+              border: '1px solid rgba(99,102,241,0.3)',
+              borderRadius: 14,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
             }}>
-              <span style={{ fontSize:'1rem' }}>ℹ️</span>
-              {toast}
+              <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="0" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.08)" strokeWidth="1"/>
+                <line x1="0" y1="20" x2="40" y2="20" stroke="rgba(255,255,255,0.08)" strokeWidth="1"/>
+                <line x1="7" y1="26" x2="7" y2="32" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round"/>
+                <rect x="4.5" y="22" width="5" height="4" rx="1" fill="#ef4444"/>
+                <line x1="7" y1="18" x2="7" y2="22" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="16" y1="28" x2="16" y2="32" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
+                <rect x="13.5" y="18" width="5" height="10" rx="1" fill="#10b981"/>
+                <line x1="16" y1="13" x2="16" y2="18" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="25" y1="25" x2="25" y2="30" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
+                <rect x="22.5" y="14" width="5" height="11" rx="1" fill="#10b981"/>
+                <line x1="25" y1="10" x2="25" y2="14" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M4 31 L14 24 L22 17 L32 10" stroke="url(#trendGrad)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                <circle cx="32" cy="10" r="2.5" fill="#38bdf8"/>
+                <defs>
+                  <linearGradient id="trendGrad" x1="4" y1="31" x2="32" y2="10" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#818cf8"/>
+                    <stop offset="100%" stopColor="#38bdf8"/>
+                  </linearGradient>
+                </defs>
+              </svg>
             </div>
-          )}
+            <div>
+              <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+                Mini ERP + CRM
+              </h1>
+              <span style={{ fontSize: '0.78rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+                Wholesale Operations Portal
+              </span>
+            </div>
+          </div>
 
-          {/* Choose Account Type */}
-          <div style={{ marginTop:'1.75rem', paddingTop:'1.25rem', borderTop:'1px solid var(--border-subtle)' }}>
-            <p className="demo-section-label">Choose Account Type</p>
-            <div className="demo-grid">
-              {DEMO_ACCOUNTS.map(acc => (
-                <button
-                  key={acc.role}
-                  type="button"
-                  className={`demo-btn ${loginEmail === acc.email && mode === 'login' ? 'active' : ''}`}
-                  onClick={() => fillDemo(acc)}
-                >
-                  <div
-                    className="demo-btn-role"
-                    style={{ color: acc.color }}
-                  >
-                    {acc.role}
+          <div style={{ marginBottom: '2rem' }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              padding: '0.3rem 0.75rem', borderRadius: '99px',
+              background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.25)',
+              fontSize: '0.75rem', fontWeight: 600, color: '#a5b4fc', marginBottom: '1rem'
+            }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399' }} />
+              Enterprise Business System v1.0
+            </span>
+
+            {/* Typewriter Dynamic Showcase */}
+            <TypewriterText />
+          </div>
+
+          {/* Feature Highlights Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+            <div className="brand-feature-card">
+              <div style={{ fontSize: '1.1rem', marginBottom: '0.3rem' }}>⚡</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>Atomic Stock Transactions</div>
+              <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '2px' }}>Prisma $transaction guarantees zero negative inventory.</div>
+            </div>
+            <div className="brand-feature-card">
+              <div style={{ fontSize: '1.1rem', marginBottom: '0.3rem' }}>🔒</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>Role-Based RBAC</div>
+              <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '2px' }}>4 Personas: Admin, Sales, Warehouse & Accounts.</div>
+            </div>
+            <div className="brand-feature-card">
+              <div style={{ fontSize: '1.1rem', marginBottom: '0.3rem' }}>📄</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>Price Snapshots</div>
+              <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '2px' }}>Immutable invoice history and Sales Challans.</div>
+            </div>
+            <div className="brand-feature-card">
+              <div style={{ fontSize: '1.1rem', marginBottom: '0.3rem' }}>🗄️</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>Neon PostgreSQL</div>
+              <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '2px' }}>Live pooled cloud database with audit logs.</div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── RIGHT COLUMN: LOGIN / REGISTER CARD ── */}
+        <div className="login-form-side">
+          <div className="login-card-inner">
+            {/* Tab Switcher */}
+            <div className="login-tabs mb-6">
+              <button
+                type="button"
+                className={`login-tab ${mode === 'login' ? 'active' : ''}`}
+                onClick={() => { setMode('login'); clearState(); }}
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                className={`login-tab ${mode === 'register' ? 'active' : ''}`}
+                onClick={() => { setMode('register'); clearState(); }}
+              >
+                Create Account
+              </button>
+            </div>
+
+            {/* Error Alert */}
+            {error && (
+              <div className="error-alert mb-4" style={{ animation: 'slideUp 0.2s ease' }}>
+                <span>⚠️</span>
+                <span>{error}</span>
+              </div>
+            )}
+
+            {/* ─── SIGN IN FORM ─── */}
+            {mode === 'login' && (
+              <form onSubmit={handleLogin} className="space-y-4 animate-slideUp">
+                <div className="form-group">
+                  <label className="form-label">Email Address</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    value={loginEmail}
+                    onChange={e => setLoginEmail(e.target.value)}
+                    placeholder="you@company.com"
+                    autoComplete="email"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Password</label>
+                  <div className="relative">
+                    <input
+                      type={showLoginPass ? 'text' : 'password'}
+                      className="form-control"
+                      value={loginPassword}
+                      onChange={e => setLoginPassword(e.target.value)}
+                      placeholder="••••••••"
+                      autoComplete="current-password"
+                      required
+                      style={{ paddingRight:'2.75rem' }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowLoginPass(s => !s)}
+                      style={{ position:'absolute', right:'0.75rem', top:'50%', transform:'translateY(-50%)',
+                        background:'none', border:'none', cursor:'pointer', color:'var(--text-muted)', lineHeight:1, display:'flex', alignItems:'center' }}
+                      aria-label={showLoginPass ? 'Hide password' : 'Show password'}
+                    >
+                      {showLoginPass ? (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                      ) : (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      )}
+                    </button>
                   </div>
-                  <div className="demo-btn-name">{acc.name}</div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary w-full"
+                  style={{ padding:'0.75rem', fontSize:'0.9rem', marginTop:'0.25rem' }}
+                  disabled={submitting}
+                >
+                  {submitting ? (
+                    <><span className="spinner spinner-xs" style={{ borderTopColor:'white' }} /> Authenticating...</>
+                  ) : (
+                    '→ Sign In to Portal'
+                  )}
                 </button>
-              ))}
+
+                {/* OR Divider */}
+                <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', margin:'0.25rem 0' }}>
+                  <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
+                  <span style={{ fontSize:'0.72rem', color:'var(--text-muted)', fontWeight:500, letterSpacing:'0.05em' }}>OR</span>
+                  <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
+                </div>
+
+                {/* Google Sign-In Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowGoogleModal(true)}
+                  disabled={googleLoading}
+                  style={{
+                    width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:'0.65rem',
+                    padding:'0.7rem 1.25rem',
+                    background:'#ffffff',
+                    border:'1px solid #dadce0',
+                    borderRadius:6,
+                    cursor: googleLoading ? 'not-allowed' : 'pointer',
+                    fontFamily:'Google Sans, Roboto, Inter, sans-serif',
+                    fontSize:'0.875rem',
+                    fontWeight:500,
+                    color:'#3c4043',
+                    letterSpacing:'0.01em',
+                    transition:'all 0.2s ease',
+                    opacity: googleLoading ? 0.8 : 1,
+                    boxShadow:'0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08)',
+                  }}
+                  onMouseEnter={e => { if (!googleLoading) (e.currentTarget as HTMLButtonElement).style.boxShadow='0 2px 8px rgba(0,0,0,0.18)'; (e.currentTarget as HTMLButtonElement).style.background='#f8f9fa'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLButtonElement).style.background='#ffffff'; }}
+                >
+                  {googleLoading ? (
+                    <>
+                      <svg width="18" height="18" viewBox="0 0 18 18" style={{ animation:'spin 0.8s linear infinite' }}>
+                        <circle cx="9" cy="9" r="7" fill="none" stroke="#4285F4" strokeWidth="2" strokeDasharray="22" strokeDashoffset="8" strokeLinecap="round"/>
+                      </svg>
+                      <span>Authenticating Google account...</span>
+                    </>
+                  ) : (
+                    <>
+                      {/* Official Google G Logo */}
+                      <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+                        <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+                        <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/>
+                        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+                      </svg>
+                      <span>Sign in with Google</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* ─── REGISTER FORM ─── */}
+            {mode === 'register' && (
+              <form onSubmit={handleRegister} className="space-y-4 animate-slideUp">
+                <div className="form-group">
+                  <label className="form-label">Full Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={regName}
+                    onChange={e => setRegName(e.target.value)}
+                    placeholder="Rahul Verma"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Email Address</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    value={regEmail}
+                    onChange={e => setRegEmail(e.target.value)}
+                    placeholder="rahul@company.com"
+                    autoComplete="email"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Password</label>
+                  <div className="relative">
+                    <input
+                      type={showRegPass ? 'text' : 'password'}
+                      className="form-control"
+                      value={regPassword}
+                      onChange={e => setRegPassword(e.target.value)}
+                      placeholder="Minimum 6 characters"
+                      minLength={6}
+                      required
+                      style={{ paddingRight:'2.75rem' }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowRegPass(s => !s)}
+                      style={{ position:'absolute', right:'0.75rem', top:'50%', transform:'translateY(-50%)',
+                        background:'none', border:'none', cursor:'pointer', color:'var(--text-muted)', lineHeight:1, display:'flex', alignItems:'center' }}
+                      aria-label={showRegPass ? 'Hide password' : 'Show password'}
+                    >
+                      {showRegPass ? (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                      ) : (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Employee Role Persona</label>
+                  <div className="grid grid-cols-2 gap-2" style={{ marginTop:'0.2rem' }}>
+                    {ROLE_OPTIONS.map(opt => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => setRegRole(opt.value)}
+                        style={{
+                          padding:'0.6rem 0.75rem',
+                          borderRadius:'var(--radius-md)',
+                          border: regRole === opt.value ? '1px solid var(--primary)' : '1px solid var(--border-base)',
+                          background: regRole === opt.value ? 'var(--primary-light)' : 'var(--bg-input)',
+                          cursor:'pointer',
+                          textAlign:'left',
+                          transition:'all 0.15s ease',
+                        }}
+                      >
+                        <div style={{ fontSize:'0.68rem', fontWeight:800, color: regRole === opt.value ? '#a5b4fc' : 'var(--text-muted)', textTransform:'uppercase', letterSpacing:'0.05em' }}>
+                          {opt.label}
+                        </div>
+                        <div style={{ fontSize:'0.65rem', color:'var(--text-muted)', marginTop:'1px' }}>{opt.desc}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary w-full"
+                  style={{ padding:'0.75rem', fontSize:'0.9rem', marginTop:'0.25rem' }}
+                  disabled={submitting}
+                >
+                  {submitting ? (
+                    <><span className="spinner spinner-xs" style={{ borderTopColor:'white' }} /> Creating Account...</>
+                  ) : (
+                    '✦ Create Account & Sign In'
+                  )}
+                </button>
+
+                {/* OR Divider */}
+                <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', margin:'0.25rem 0' }}>
+                  <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
+                  <span style={{ fontSize:'0.72rem', color:'var(--text-muted)', fontWeight:500, letterSpacing:'0.05em' }}>OR</span>
+                  <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
+                </div>
+
+                {/* Google Sign-In Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowGoogleModal(true)}
+                  disabled={googleLoading}
+                  style={{
+                    width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:'0.65rem',
+                    padding:'0.7rem 1.25rem',
+                    background:'#ffffff',
+                    border:'1px solid #dadce0',
+                    borderRadius:6,
+                    cursor: googleLoading ? 'not-allowed' : 'pointer',
+                    fontFamily:'Google Sans, Roboto, Inter, sans-serif',
+                    fontSize:'0.875rem',
+                    fontWeight:500,
+                    color:'#3c4043',
+                    letterSpacing:'0.01em',
+                    transition:'all 0.2s ease',
+                    opacity: googleLoading ? 0.8 : 1,
+                    boxShadow:'0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08)',
+                  }}
+                  onMouseEnter={e => { if (!googleLoading) (e.currentTarget as HTMLButtonElement).style.boxShadow='0 2px 8px rgba(0,0,0,0.18)'; (e.currentTarget as HTMLButtonElement).style.background='#f8f9fa'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLButtonElement).style.background='#ffffff'; }}
+                >
+                  {googleLoading ? (
+                    <>
+                      <svg width="18" height="18" viewBox="0 0 18 18" style={{ animation:'spin 0.8s linear infinite' }}>
+                        <circle cx="9" cy="9" r="7" fill="none" stroke="#4285F4" strokeWidth="2" strokeDasharray="22" strokeDashoffset="8" strokeLinecap="round"/>
+                      </svg>
+                      <span>Authenticating Google account...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+                        <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+                        <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/>
+                        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+                      </svg>
+                      <span>Sign up with Google</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* Toast Notification */}
+            {toast && (
+              <div style={{
+                position:'fixed', bottom:'2rem', left:'50%', transform:'translateX(-50%)',
+                background:'#1e293b', border:'1px solid rgba(99,102,241,0.3)',
+                color:'#e2e8f0', padding:'0.75rem 1.25rem', borderRadius:10,
+                fontSize:'0.82rem', fontWeight:500, zIndex:999,
+                boxShadow:'0 8px 30px rgba(0,0,0,0.4)',
+                display:'flex', alignItems:'center', gap:'0.6rem',
+                maxWidth:380, textAlign:'center',
+                animation:'slideUp 0.25s ease',
+              }}>
+                <span style={{ fontSize:'1rem' }}>ℹ️</span>
+                {toast}
+              </div>
+            )}
+
+            {/* Choose Account Type */}
+            <div style={{ marginTop:'1.5rem', paddingTop:'1rem', borderTop:'1px solid var(--border-subtle)' }}>
+              <p className="demo-section-label">Choose Account Type</p>
+              <div className="demo-grid">
+                {DEMO_ACCOUNTS.map(acc => (
+                  <button
+                    key={acc.role}
+                    type="button"
+                    className={`demo-btn ${loginEmail === acc.email && mode === 'login' ? 'active' : ''}`}
+                    onClick={() => fillDemo(acc)}
+                  >
+                    <div
+                      className="demo-btn-role"
+                      style={{ color: acc.color }}
+                    >
+                      {acc.role}
+                    </div>
+                    <div className="demo-btn-name">{acc.name}</div>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
