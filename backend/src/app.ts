@@ -21,7 +21,17 @@ app.use(
 );
 app.use(express.json());
 
-// 2. Health Check Route
+// 2. Health & Root Welcome Routes
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).json({
+    success: true,
+    message: '🚀 Mini ERP + CRM Backend API is running live!',
+    health: '/health',
+    version: '1.0.0',
+    timestamp: new Date()
+  });
+});
+
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'OK', timestamp: new Date() });
 });
