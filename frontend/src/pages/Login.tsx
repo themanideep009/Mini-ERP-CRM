@@ -7,10 +7,10 @@ type Mode = 'login' | 'register';
 type Role = 'ADMIN' | 'SALES' | 'WAREHOUSE' | 'ACCOUNTS';
 
 const DEMO_ACCOUNTS = [
-  { role: 'ADMIN' as Role,     email: 'admin@example.com',     name: 'System Admin',        color: '#818cf8' },
-  { role: 'SALES' as Role,     email: 'sales@example.com',     name: 'Sales Executive',     color: '#38bdf8' },
-  { role: 'WAREHOUSE' as Role, email: 'warehouse@example.com', name: 'Warehouse Ops',       color: '#34d399' },
-  { role: 'ACCOUNTS' as Role,  email: 'accounts@example.com',  name: 'Accounts Officer',    color: '#fbbf24' },
+  { role: 'ADMIN' as Role,     email: 'admin@example.com',     name: 'System Admin',        color: '#059669' },
+  { role: 'SALES' as Role,     email: 'sales@example.com',     name: 'Sales Executive',     color: '#0284c7' },
+  { role: 'WAREHOUSE' as Role, email: 'warehouse@example.com', name: 'Warehouse Ops',       color: '#d97706' },
+  { role: 'ACCOUNTS' as Role,  email: 'accounts@example.com',  name: 'Accounts Officer',    color: '#7c3aed' },
 ];
 
 const GOOGLE_PRESET_ACCOUNTS = [
@@ -28,11 +28,11 @@ const ROLE_OPTIONS: { value: Role; label: string; desc: string }[] = [
 ];
 
 const TYPEWRITER_PHRASES = [
-  "Streamlining B2B wholesale operations, inventory & CRM in one portal.",
-  "Atomic stock transactions with zero negative inventory guarantees.",
-  "Immutable price snapshots & automated sales challan dispatches.",
-  "Role-based authorization for Admin, Sales, Warehouse & Finance.",
-  "Real-time low stock warnings & automated warehouse bin indexing.",
+  "Manage customer leads, GST details & wholesale follow-ups effortlessly.",
+  "Track warehouse stock IN/OUT with real-time minimum stock threshold warnings.",
+  "Generate sales delivery challans with instant pricing snapshots & PDF print.",
+  "Role-based operational access for Admin, Sales, Warehouse & Accounts teams.",
+  "Real-time executive dashboard for inventory valuation & daily dispatch logs.",
 ];
 
 // Typewriter Component
@@ -46,22 +46,18 @@ const TypewriterText: React.FC = () => {
     let timer: any;
 
     if (!isDeleting && displayText.length < currentPhrase.length) {
-      // Typing next character
       timer = setTimeout(() => {
         setDisplayText(currentPhrase.substring(0, displayText.length + 1));
-      }, 45);
+      }, 40);
     } else if (!isDeleting && displayText.length === currentPhrase.length) {
-      // Pause at full sentence before deleting
       timer = setTimeout(() => {
         setIsDeleting(true);
-      }, 2400);
+      }, 2300);
     } else if (isDeleting && displayText.length > 0) {
-      // Deleting character by character
       timer = setTimeout(() => {
         setDisplayText(currentPhrase.substring(0, displayText.length - 1));
-      }, 25);
+      }, 22);
     } else if (isDeleting && displayText.length === 0) {
-      // Finished deleting, move to next phrase
       setIsDeleting(false);
       setPhraseIdx((prev) => (prev + 1) % TYPEWRITER_PHRASES.length);
     }
@@ -71,13 +67,13 @@ const TypewriterText: React.FC = () => {
 
   return (
     <div style={{ minHeight: '4.5rem', display: 'flex', alignItems: 'center' }}>
-      <p style={{ fontSize: '1.15rem', color: '#94a3b8', lineHeight: 1.6, fontWeight: 400, margin: 0 }}>
+      <p style={{ fontSize: '1.15rem', color: '#475569', lineHeight: 1.6, fontWeight: 500, margin: 0 }}>
         {displayText}
         <span style={{
           display: 'inline-block',
           width: '2px',
           height: '1.2em',
-          backgroundColor: '#6366f1',
+          backgroundColor: '#059669',
           marginLeft: '4px',
           verticalAlign: 'middle',
           animation: 'blink 1s step-start infinite',
@@ -201,7 +197,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="login-page-split">
-      {/* Background ambient lighting */}
+      {/* Subtle light background grid */}
       <div className="login-bg-grid" />
 
       <div className="login-container-split">
@@ -210,39 +206,32 @@ const Login: React.FC = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.75rem' }}>
             <div style={{
               width: 52, height: 52,
-              background: 'linear-gradient(135deg, rgba(79,70,229,0.25), rgba(14,165,233,0.15))',
-              border: '1px solid rgba(99,102,241,0.3)',
+              background: 'linear-gradient(135deg, #059669, #10b981)',
               borderRadius: 14,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
+              boxShadow: '0 4px 16px rgba(5,150,105,0.25)'
             }}>
               <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line x1="0" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.08)" strokeWidth="1"/>
-                <line x1="0" y1="20" x2="40" y2="20" stroke="rgba(255,255,255,0.08)" strokeWidth="1"/>
-                <line x1="7" y1="26" x2="7" y2="32" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="0" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" strokeWidth="1"/>
+                <line x1="0" y1="20" x2="40" y2="20" stroke="rgba(255,255,255,0.2)" strokeWidth="1"/>
+                <line x1="7" y1="26" x2="7" y2="32" stroke="#fca5a5" strokeWidth="1.5" strokeLinecap="round"/>
                 <rect x="4.5" y="22" width="5" height="4" rx="1" fill="#ef4444"/>
-                <line x1="7" y1="18" x2="7" y2="22" stroke="#f87171" strokeWidth="1.5" strokeLinecap="round"/>
-                <line x1="16" y1="28" x2="16" y2="32" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="7" y1="18" x2="7" y2="22" stroke="#fca5a5" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="16" y1="28" x2="16" y2="32" stroke="#6ee7b7" strokeWidth="1.5" strokeLinecap="round"/>
                 <rect x="13.5" y="18" width="5" height="10" rx="1" fill="#10b981"/>
-                <line x1="16" y1="13" x2="16" y2="18" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
-                <line x1="25" y1="25" x2="25" y2="30" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="16" y1="13" x2="16" y2="18" stroke="#6ee7b7" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="25" y1="25" x2="25" y2="30" stroke="#6ee7b7" strokeWidth="1.5" strokeLinecap="round"/>
                 <rect x="22.5" y="14" width="5" height="11" rx="1" fill="#10b981"/>
-                <line x1="25" y1="10" x2="25" y2="14" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round"/>
-                <path d="M4 31 L14 24 L22 17 L32 10" stroke="url(#trendGrad)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                <circle cx="32" cy="10" r="2.5" fill="#38bdf8"/>
-                <defs>
-                  <linearGradient id="trendGrad" x1="4" y1="31" x2="32" y2="10" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stopColor="#818cf8"/>
-                    <stop offset="100%" stopColor="#38bdf8"/>
-                  </linearGradient>
-                </defs>
+                <line x1="25" y1="10" x2="25" y2="14" stroke="#6ee7b7" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M4 31 L14 24 L22 17 L32 10" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                <circle cx="32" cy="10" r="3" fill="#fbbf24"/>
               </svg>
             </div>
             <div>
-              <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+              <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
                 Mini ERP + CRM
               </h1>
-              <span style={{ fontSize: '0.78rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+              <span style={{ fontSize: '0.78rem', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700 }}>
                 Wholesale Operations Portal
               </span>
             </div>
@@ -251,39 +240,39 @@ const Login: React.FC = () => {
           <div style={{ marginBottom: '2rem' }}>
             <span style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-              padding: '0.3rem 0.75rem', borderRadius: '99px',
-              background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.25)',
-              fontSize: '0.75rem', fontWeight: 600, color: '#a5b4fc', marginBottom: '1rem'
+              padding: '0.35rem 0.85rem', borderRadius: '99px',
+              background: '#ecfdf5', border: '1px solid #a7f3d0',
+              fontSize: '0.75rem', fontWeight: 700, color: '#047857', marginBottom: '1.25rem'
             }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399' }} />
-              Enterprise Business System v1.0
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
+              Enterprise Operations Management System
             </span>
 
             {/* Typewriter Dynamic Showcase */}
             <TypewriterText />
           </div>
 
-          {/* Feature Highlights Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+          {/* Business & Operations Feature Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid #e2e8f0' }}>
             <div className="brand-feature-card">
-              <div style={{ fontSize: '1.1rem', marginBottom: '0.3rem' }}>⚡</div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>Atomic Stock Transactions</div>
-              <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '2px' }}>Prisma $transaction guarantees zero negative inventory.</div>
+              <div style={{ fontSize: '1.2rem', marginBottom: '0.35rem' }}>🏢</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>Wholesale Customer CRM</div>
+              <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px', lineHeight: 1.4 }}>Manage B2B client leads, follow-up dates, GST numbers & credit limits.</div>
             </div>
             <div className="brand-feature-card">
-              <div style={{ fontSize: '1.1rem', marginBottom: '0.3rem' }}>🔒</div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>Role-Based RBAC</div>
-              <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '2px' }}>4 Personas: Admin, Sales, Warehouse & Accounts.</div>
+              <div style={{ fontSize: '1.2rem', marginBottom: '0.35rem' }}>📦</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>Warehouse & Inventory</div>
+              <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px', lineHeight: 1.4 }}>Real-time stock IN/OUT ledger, bin indexing & low-stock alerts.</div>
             </div>
             <div className="brand-feature-card">
-              <div style={{ fontSize: '1.1rem', marginBottom: '0.3rem' }}>📄</div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>Price Snapshots</div>
-              <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '2px' }}>Immutable invoice history and Sales Challans.</div>
+              <div style={{ fontSize: '1.2rem', marginBottom: '0.35rem' }}>📄</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>Sales Delivery Challans</div>
+              <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px', lineHeight: 1.4 }}>Multi-item dispatch orders with historical pricing snapshots & PDF print.</div>
             </div>
             <div className="brand-feature-card">
-              <div style={{ fontSize: '1.1rem', marginBottom: '0.3rem' }}>🗄️</div>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>Neon PostgreSQL</div>
-              <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '2px' }}>Live pooled cloud database with audit logs.</div>
+              <div style={{ fontSize: '1.2rem', marginBottom: '0.35rem' }}>📊</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>Executive Operations</div>
+              <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px', lineHeight: 1.4 }}>Live KPI dashboard monitoring daily dispatches & inventory valuation.</div>
             </div>
           </div>
         </div>
@@ -378,7 +367,7 @@ const Login: React.FC = () => {
                 {/* OR Divider */}
                 <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', margin:'0.25rem 0' }}>
                   <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
-                  <span style={{ fontSize:'0.72rem', color:'var(--text-muted)', fontWeight:500, letterSpacing:'0.05em' }}>OR</span>
+                  <span style={{ fontSize:'0.72rem', color:'var(--text-muted)', fontWeight:600, letterSpacing:'0.05em' }}>OR</span>
                   <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
                 </div>
 
@@ -391,25 +380,25 @@ const Login: React.FC = () => {
                     width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:'0.65rem',
                     padding:'0.7rem 1.25rem',
                     background:'#ffffff',
-                    border:'1px solid #dadce0',
-                    borderRadius:6,
+                    border:'1px solid #cbd5e1',
+                    borderRadius:8,
                     cursor: googleLoading ? 'not-allowed' : 'pointer',
                     fontFamily:'Google Sans, Roboto, Inter, sans-serif',
                     fontSize:'0.875rem',
                     fontWeight:500,
-                    color:'#3c4043',
+                    color:'#334155',
                     letterSpacing:'0.01em',
                     transition:'all 0.2s ease',
                     opacity: googleLoading ? 0.8 : 1,
-                    boxShadow:'0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08)',
+                    boxShadow:'0 1px 2px rgba(0,0,0,0.05)',
                   }}
-                  onMouseEnter={e => { if (!googleLoading) (e.currentTarget as HTMLButtonElement).style.boxShadow='0 2px 8px rgba(0,0,0,0.18)'; (e.currentTarget as HTMLButtonElement).style.background='#f8f9fa'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLButtonElement).style.background='#ffffff'; }}
+                  onMouseEnter={e => { if (!googleLoading) (e.currentTarget as HTMLButtonElement).style.boxShadow='0 2px 6px rgba(0,0,0,0.1)'; (e.currentTarget as HTMLButtonElement).style.background='#f8fafc'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow='0 1px 2px rgba(0,0,0,0.05)'; (e.currentTarget as HTMLButtonElement).style.background='#ffffff'; }}
                 >
                   {googleLoading ? (
                     <>
                       <svg width="18" height="18" viewBox="0 0 18 18" style={{ animation:'spin 0.8s linear infinite' }}>
-                        <circle cx="9" cy="9" r="7" fill="none" stroke="#4285F4" strokeWidth="2" strokeDasharray="22" strokeDashoffset="8" strokeLinecap="round"/>
+                        <circle cx="9" cy="9" r="7" fill="none" stroke="#059669" strokeWidth="2" strokeDasharray="22" strokeDashoffset="8" strokeLinecap="round"/>
                       </svg>
                       <span>Authenticating Google account...</span>
                     </>
@@ -504,7 +493,7 @@ const Login: React.FC = () => {
                           transition:'all 0.15s ease',
                         }}
                       >
-                        <div style={{ fontSize:'0.68rem', fontWeight:800, color: regRole === opt.value ? '#a5b4fc' : 'var(--text-muted)', textTransform:'uppercase', letterSpacing:'0.05em' }}>
+                        <div style={{ fontSize:'0.68rem', fontWeight:800, color: regRole === opt.value ? '#047857' : 'var(--text-muted)', textTransform:'uppercase', letterSpacing:'0.05em' }}>
                           {opt.label}
                         </div>
                         <div style={{ fontSize:'0.65rem', color:'var(--text-muted)', marginTop:'1px' }}>{opt.desc}</div>
@@ -529,7 +518,7 @@ const Login: React.FC = () => {
                 {/* OR Divider */}
                 <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', margin:'0.25rem 0' }}>
                   <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
-                  <span style={{ fontSize:'0.72rem', color:'var(--text-muted)', fontWeight:500, letterSpacing:'0.05em' }}>OR</span>
+                  <span style={{ fontSize:'0.72rem', color:'var(--text-muted)', fontWeight:600, letterSpacing:'0.05em' }}>OR</span>
                   <div style={{ flex:1, height:1, background:'var(--border-subtle)' }} />
                 </div>
 
@@ -542,25 +531,25 @@ const Login: React.FC = () => {
                     width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:'0.65rem',
                     padding:'0.7rem 1.25rem',
                     background:'#ffffff',
-                    border:'1px solid #dadce0',
-                    borderRadius:6,
+                    border:'1px solid #cbd5e1',
+                    borderRadius:8,
                     cursor: googleLoading ? 'not-allowed' : 'pointer',
                     fontFamily:'Google Sans, Roboto, Inter, sans-serif',
                     fontSize:'0.875rem',
                     fontWeight:500,
-                    color:'#3c4043',
+                    color:'#334155',
                     letterSpacing:'0.01em',
                     transition:'all 0.2s ease',
                     opacity: googleLoading ? 0.8 : 1,
-                    boxShadow:'0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08)',
+                    boxShadow:'0 1px 2px rgba(0,0,0,0.05)',
                   }}
-                  onMouseEnter={e => { if (!googleLoading) (e.currentTarget as HTMLButtonElement).style.boxShadow='0 2px 8px rgba(0,0,0,0.18)'; (e.currentTarget as HTMLButtonElement).style.background='#f8f9fa'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow='0 1px 3px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLButtonElement).style.background='#ffffff'; }}
+                  onMouseEnter={e => { if (!googleLoading) (e.currentTarget as HTMLButtonElement).style.boxShadow='0 2px 6px rgba(0,0,0,0.1)'; (e.currentTarget as HTMLButtonElement).style.background='#f8fafc'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow='0 1px 2px rgba(0,0,0,0.05)'; (e.currentTarget as HTMLButtonElement).style.background='#ffffff'; }}
                 >
                   {googleLoading ? (
                     <>
                       <svg width="18" height="18" viewBox="0 0 18 18" style={{ animation:'spin 0.8s linear infinite' }}>
-                        <circle cx="9" cy="9" r="7" fill="none" stroke="#4285F4" strokeWidth="2" strokeDasharray="22" strokeDashoffset="8" strokeLinecap="round"/>
+                        <circle cx="9" cy="9" r="7" fill="none" stroke="#059669" strokeWidth="2" strokeDasharray="22" strokeDashoffset="8" strokeLinecap="round"/>
                       </svg>
                       <span>Authenticating Google account...</span>
                     </>
@@ -583,10 +572,10 @@ const Login: React.FC = () => {
             {toast && (
               <div style={{
                 position:'fixed', bottom:'2rem', left:'50%', transform:'translateX(-50%)',
-                background:'#1e293b', border:'1px solid rgba(99,102,241,0.3)',
-                color:'#e2e8f0', padding:'0.75rem 1.25rem', borderRadius:10,
+                background:'#0f172a', border:'1px solid #059669',
+                color:'#f8fafc', padding:'0.75rem 1.25rem', borderRadius:10,
                 fontSize:'0.82rem', fontWeight:500, zIndex:999,
-                boxShadow:'0 8px 30px rgba(0,0,0,0.4)',
+                boxShadow:'0 8px 30px rgba(0,0,0,0.15)',
                 display:'flex', alignItems:'center', gap:'0.6rem',
                 maxWidth:380, textAlign:'center',
                 animation:'slideUp 0.25s ease',
@@ -625,9 +614,9 @@ const Login: React.FC = () => {
       {/* ── GOOGLE ACCOUNTS POPUP MODAL ── */}
       {showGoogleModal && (
         <div className="modal-backdrop" style={{ zIndex: 9999 }}>
-          <div className="modal-content animate-slideUp" style={{ maxWidth: 440, background: '#ffffff', color: '#202124', border: '1px solid #dadce0', boxShadow: '0 12px 40px rgba(0,0,0,0.25)', borderRadius: 16 }}>
+          <div className="modal-content animate-slideUp" style={{ maxWidth: 440, background: '#ffffff', color: '#0f172a', border: '1px solid #cbd5e1', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', borderRadius: 16 }}>
             {/* Google Header */}
-            <div style={{ padding: '1.25rem 1.5rem 0.5rem', textAlign: 'center', borderBottom: '1px solid #f1f3f4' }}>
+            <div style={{ padding: '1.25rem 1.5rem 0.5rem', textAlign: 'center', borderBottom: '1px solid #f1f5f9' }}>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}>
                 <svg width="32" height="32" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
                   <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
@@ -636,8 +625,8 @@ const Login: React.FC = () => {
                   <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
                 </svg>
               </div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: '#202124', margin: 0 }}>Sign in with Google</h3>
-              <p style={{ fontSize: '0.85rem', color: '#5f6368', marginTop: 4 }}>Choose a Google account to continue to Mini ERP + CRM</p>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: '#0f172a', margin: 0 }}>Sign in with Google</h3>
+              <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: 4 }}>Choose a Google account to continue to Mini ERP + CRM</p>
             </div>
 
             {/* Account List */}
@@ -653,23 +642,23 @@ const Login: React.FC = () => {
                         disabled={googleLoading}
                         style={{
                           display: 'flex', alignItems: 'center', gap: '0.875rem', padding: '0.75rem',
-                          borderRadius: 10, border: '1px solid #e8eaed', background: '#ffffff',
+                          borderRadius: 10, border: '1px solid #e2e8f0', background: '#ffffff',
                           cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s ease',
                         }}
-                        onMouseEnter={e => (e.currentTarget.style.background = '#f8f9fa')}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#f8fafc')}
                         onMouseLeave={e => (e.currentTarget.style.background = '#ffffff')}
                       >
                         <div style={{
-                          width: 40, height: 40, borderRadius: '50%', background: '#4285F4', color: '#ffffff',
+                          width: 40, height: 40, borderRadius: '50%', background: '#059669', color: '#ffffff',
                           display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '1.1rem', flexShrink: 0
                         }}>
                           {gAcc.avatar}
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#202124' }}>{gAcc.name}</div>
-                          <div style={{ fontSize: '0.78rem', color: '#5f6368', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{gAcc.email}</div>
+                          <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#0f172a' }}>{gAcc.name}</div>
+                          <div style={{ fontSize: '0.78rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{gAcc.email}</div>
                         </div>
-                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#1a73e8', background: '#e8f0fe', padding: '2px 8px', borderRadius: 12 }}>
+                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#047857', background: '#ecfdf5', padding: '2px 8px', borderRadius: 12 }}>
                           {gAcc.role}
                         </span>
                       </button>
@@ -682,9 +671,9 @@ const Login: React.FC = () => {
                       onClick={() => setUseCustomGoogle(true)}
                       style={{
                         width: '100%', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem',
-                        border: 'none', background: 'none', cursor: 'pointer', borderRadius: 8, color: '#1a73e8', fontSize: '0.85rem', fontWeight: 600
+                        border: 'none', background: 'none', cursor: 'pointer', borderRadius: 8, color: '#059669', fontSize: '0.85rem', fontWeight: 600
                       }}
-                      onMouseEnter={e => (e.currentTarget.style.background = '#f8f9fa')}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#f8fafc')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'none')}
                     >
                       <span style={{ fontSize: '1.1rem' }}>👤</span>
@@ -694,28 +683,28 @@ const Login: React.FC = () => {
                 </>
               ) : (
                 <form onSubmit={handleCustomGoogleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', padding: '0.5rem 0' }}>
-                  <div style={{ fontSize: '0.85rem', color: '#5f6368', marginBottom: 4 }}>
+                  <div style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: 4 }}>
                     Enter any Google or Gmail address:
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#3c4043', marginBottom: 4 }}>Full Name</label>
+                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#334155', marginBottom: 4 }}>Full Name</label>
                     <input
                       type="text"
                       placeholder="e.g. Ramesh Kumar"
                       value={customGoogleName}
                       onChange={e => setCustomGoogleName(e.target.value)}
-                      style={{ width: '100%', padding: '0.65rem 0.85rem', borderRadius: 6, border: '1px solid #dadce0', fontSize: '0.875rem', outline: 'none' }}
+                      style={{ width: '100%', padding: '0.65rem 0.85rem', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.875rem', outline: 'none' }}
                       required
                     />
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#3c4043', marginBottom: 4 }}>Google Email</label>
+                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#334155', marginBottom: 4 }}>Google Email</label>
                     <input
                       type="email"
                       placeholder="user@gmail.com or @company.com"
                       value={customGoogleEmail}
                       onChange={e => setCustomGoogleEmail(e.target.value)}
-                      style={{ width: '100%', padding: '0.65rem 0.85rem', borderRadius: 6, border: '1px solid #dadce0', fontSize: '0.875rem', outline: 'none' }}
+                      style={{ width: '100%', padding: '0.65rem 0.85rem', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: '0.875rem', outline: 'none' }}
                       required
                     />
                   </div>
@@ -723,14 +712,14 @@ const Login: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setUseCustomGoogle(false)}
-                      style={{ flex: 1, padding: '0.65rem', borderRadius: 6, border: '1px solid #dadce0', background: '#fff', color: '#3c4043', fontWeight: 600, cursor: 'pointer' }}
+                      style={{ flex: 1, padding: '0.65rem', borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff', color: '#334155', fontWeight: 600, cursor: 'pointer' }}
                     >
                       Back
                     </button>
                     <button
                       type="submit"
                       disabled={googleLoading}
-                      style={{ flex: 1, padding: '0.65rem', borderRadius: 6, border: 'none', background: '#1a73e8', color: '#fff', fontWeight: 600, cursor: 'pointer' }}
+                      style={{ flex: 1, padding: '0.65rem', borderRadius: 6, border: 'none', background: '#059669', color: '#fff', fontWeight: 600, cursor: 'pointer' }}
                     >
                       {googleLoading ? 'Signing in...' : 'Continue'}
                     </button>
@@ -740,12 +729,12 @@ const Login: React.FC = () => {
             </div>
 
             {/* Modal Footer */}
-            <div style={{ padding: '0.875rem 1.5rem', background: '#f8f9fa', borderTop: '1px solid #f1f3f4', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
-              <span style={{ fontSize: '0.72rem', color: '#70757a' }}>Secured by Google Identity</span>
+            <div style={{ padding: '0.875rem 1.5rem', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
+              <span style={{ fontSize: '0.72rem', color: '#64748b' }}>Secured by Google Identity</span>
               <button
                 type="button"
                 onClick={() => { setShowGoogleModal(false); setUseCustomGoogle(false); }}
-                style={{ background: 'none', border: 'none', color: '#5f6368', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}
+                style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}
               >
                 Cancel
               </button>

@@ -6,49 +6,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-  /* ─── Brand Colors (Sophisticated, Muted Palette) ─── */
-  --primary:        #6366f1;
-  --primary-hover:  #4f46e5;
-  --primary-light:  rgba(99, 102, 241, 0.12);
-  --primary-glow:   rgba(99, 102, 241, 0.2);
+  /* ─── Brand Colors (Soft Light Emerald & Amber - Non-Blue) ─── */
+  --primary:        #059669;
+  --primary-hover:  #047857;
+  --primary-light:  rgba(5, 150, 105, 0.08);
+  --primary-glow:   rgba(5, 150, 105, 0.15);
 
-  --accent:         #0284c7;
-  --accent-hover:   #0369a1;
-  --accent-light:   rgba(2, 132, 199, 0.12);
+  --accent:         #d97706;
+  --accent-hover:   #b45309;
+  --accent-light:   rgba(217, 119, 6, 0.08);
 
   --success:        #10b981;
-  --success-light:  rgba(16, 185, 129, 0.12);
-  --success-border: rgba(16, 185, 129, 0.25);
+  --success-light:  rgba(16, 185, 129, 0.1);
+  --success-border: rgba(16, 185, 129, 0.3);
 
   --warning:        #f59e0b;
-  --warning-light:  rgba(245, 158, 11, 0.12);
-  --warning-border: rgba(245, 158, 11, 0.25);
+  --warning-light:  rgba(245, 158, 11, 0.1);
+  --warning-border: rgba(245, 158, 11, 0.3);
 
-  --danger:         #f43f5e;
-  --danger-light:   rgba(244, 63, 94, 0.12);
-  --danger-border:  rgba(244, 63, 94, 0.25);
+  --danger:         #e11d48;
+  --danger-light:   rgba(225, 29, 72, 0.1);
+  --danger-border:  rgba(225, 29, 72, 0.3);
 
-  /* ─── Neutral Dark Scale (Non-glary Slate Charcoal) ─── */
-  --bg-base:        #090d16;
-  --bg-surface:     #0f172a;
-  --bg-elevated:    #1e293b;
-  --bg-card:        rgba(15, 23, 42, 0.82);
-  --bg-card-hover:  rgba(30, 41, 59, 0.85);
-  --bg-input:       rgba(255,255,255,0.04);
+  /* ─── Neutral Light Scale (Off-white & Slate Charcoal) ─── */
+  --bg-base:        #f8fafc;
+  --bg-surface:     #ffffff;
+  --bg-elevated:    #f1f5f9;
+  --bg-card:        #ffffff;
+  --bg-card-hover:  #f8fafc;
+  --bg-input:       #ffffff;
 
-  --border-subtle:  rgba(255,255,255,0.06);
-  --border-base:    rgba(255,255,255,0.09);
-  --border-strong:  rgba(255,255,255,0.15);
+  --border-subtle:  #f1f5f9;
+  --border-base:    #e2e8f0;
+  --border-strong:  #cbd5e1;
 
-  --text-primary:   #f8fafc;
-  --text-secondary: #94a3b8;
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
   --text-muted:     #64748b;
-  --text-dim:       #475569;
+  --text-dim:       #94a3b8;
 
   /* ─── Sidebar ─── */
   --sidebar-w:      260px;
-  --sidebar-bg:     #080f1e;
-  --sidebar-border: rgba(255,255,255,0.06);
+  --sidebar-bg:     #ffffff;
+  --sidebar-border: #e2e8f0;
 
   /* ─── Sizing ─── */
   --radius-xs:  4px;
@@ -59,10 +59,10 @@
   --radius-2xl: 24px;
 
   /* ─── Shadows ─── */
-  --shadow-sm:  0 1px 3px rgba(0,0,0,0.4);
-  --shadow-md:  0 4px 16px rgba(0,0,0,0.4);
-  --shadow-lg:  0 12px 40px rgba(0,0,0,0.5);
-  --shadow-glow:0 0 30px rgba(99,102,241,0.25);
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg:  0 12px 32px rgba(0,0,0,0.08);
+  --shadow-glow:0 0 20px rgba(5,150,105,0.12);
 
   /* ─── Transitions ─── */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -84,10 +84,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  background-image:
-    radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99,102,241,0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6,182,212,0.06) 0%, transparent 70%);
-  background-attachment: fixed;
 }
 
 /* ═══════════════════════════════════════════
@@ -589,8 +585,8 @@ body {
 .form-control:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
-  background: rgba(99,102,241,0.05);
+  box-shadow: 0 0 0 3px rgba(5,150,105,0.15);
+  background: #ffffff;
 }
 
 .form-control:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -986,24 +982,22 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   display: flex;
   flex-direction: column;
   padding: 2.25rem 2rem;
-  background: rgba(15, 23, 42, 0.55);
+  background: #ffffff;
   border: 1px solid var(--border-base);
   border-radius: var(--radius-2xl);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  box-shadow: var(--shadow-md);
 }
 
 .brand-feature-card {
-  padding: 0.85rem 1rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.9rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: var(--radius-md);
   transition: all 0.2s ease;
 }
 .brand-feature-card:hover {
-  background: rgba(99, 102, 241, 0.06);
-  border-color: rgba(99, 102, 241, 0.25);
+  background: #ecfdf5;
+  border-color: #a7f3d0;
   transform: translateY(-2px);
 }
 
@@ -1014,12 +1008,10 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 }
 
 .login-card-inner {
-  background: var(--bg-card);
-  border: 1px solid var(--border-strong);
+  background: #ffffff;
+  border: 1px solid var(--border-base);
   border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-lg), 0 0 60px rgba(0,0,0,0.3);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
   padding: 2rem;
 }
 
@@ -1046,7 +1038,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 
 .login-tabs {
   display: flex;
-  background: rgba(0,0,0,0.25);
+  background: #f1f5f9;
   border-radius: var(--radius-md);
   padding: 3px;
   margin-bottom: 1.5rem;
@@ -1069,7 +1061,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 .login-tab.active {
   background: var(--primary);
   color: white;
-  box-shadow: 0 2px 10px rgba(99,102,241,0.4);
+  box-shadow: 0 2px 8px rgba(5,150,105,0.2);
 }
 
 /* Demo Accounts */
@@ -1100,14 +1092,14 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 }
 
 .demo-btn:hover {
-  border-color: rgba(99,102,241,0.4);
-  background: var(--primary-light);
+  border-color: #a7f3d0;
+  background: #ecfdf5;
 }
 
 .demo-btn.active {
   border-color: var(--primary);
-  background: var(--primary-light);
-  box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+  background: #ecfdf5;
+  box-shadow: 0 0 0 2px rgba(5,150,105,0.15);
 }
 
 .demo-btn-role {
