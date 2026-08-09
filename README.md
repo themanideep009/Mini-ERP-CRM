@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Mini ERP + CRM Operations Portal
 
 A complete, production-quality, full-stack **Mini ERP + CRM Operations Portal** designed for wholesale and distribution enterprises. Built with **Node.js, Express, TypeScript, PostgreSQL, Prisma ORM, React, and TypeScript**, this portal connects sales, warehouse, and accounting workflows with real-time inventory management, CRM lead tracking, and snapshot-based Sales Challans.
@@ -586,3 +587,7 @@ Follow this flow to demonstrate the core value of the application:
 
 ---
 **Mini ERP + CRM Operations Portal** — Built for Scalable Wholesale & Distribution Operations.
+=======
+# Mini-ERP-CRM
+⚡ Full-stack Mini ERP + CRM Portal with Google SSO, RBAC, atomic stock transactions, and live inventory management. (React + TS + Node + Prisma + PostgreSQL)
+>>>>>>> 49f52343c33ce0de81ae809856df697aac0a2ad6
